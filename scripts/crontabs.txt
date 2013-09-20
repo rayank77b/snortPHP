@@ -1,0 +1,4 @@
+# m h  dom mon dow   command
+1 * * * *  php5 /home/ray/snort/scripts/transkript_snortcnt.php 2>/dev/null >/dev/null 
+0 1 * * * /bin/cp /home/ray/snort/databases/statistikcount.sq3 /home/ray/snort/databases/backup/statistikcount.sq3_$(date +%s)
+

@@ -1,6 +1,10 @@
 <?php
 
-#require_once("class.snortDB.php");
+/**
+ * Snort PHP Monitor
+ * @author Andrej Frank <Andrej.Frank@hs-esslingen.de>
+ * @copyright Copyright (c) 2008, Andrej Frank, The GNU General Public License (GPL)
+*/
 
 class SnortObject {
     public $sid;
@@ -9,6 +13,7 @@ class SnortObject {
     public $timestamp;
 
     public $sig_name;
+    public $sig_priority;
 
     public $ip_src;
     public $ip_dst;
@@ -42,6 +47,7 @@ class SnortObject {
         $result = $db->query($sql);
         $row = $db->fetch_object($result);
         $o->sig_name=$row->sig_name;
+        $o->sig_priority=$row->sig_priority;
     }
 
     static function set_iphdr($o, $db) {
@@ -95,13 +101,6 @@ class SnortObject {
         $o->dport=$row->dport;
     }        
 
-    static function get_headers() {
-        return array("CID", "SRC", "DST", "SP", "DP", "Alerts", "Zeit");
-    }
-
-    static function getArray($o) {
-        return array($o->cid, $o->ip_src, $o->ip_dst, $o->sport, $o->dport, $o->sig_name,$o->timestamp);
-    }
 }
 
 

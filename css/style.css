@@ -5,15 +5,15 @@
 html, body {
   color: black;
   background-color: #e8eef6;
-  font: x-small "Lucida Grande", "Lucida Sans Unicode", geneva, verdana, sans-serif;
+  /*font: x-small "Lucida Grande", "Lucida Sans Unicode", geneva, verdana, sans-serif;*/
   margin: 0;
   padding: 0;
 }
 
 td, th {padding:2px;border:none;}
 tr th {text-align:left;background-color:#f0f0f0;color:#333;}
-tr.odd td {background-color:#edf3fe;}
-tr.even td {background-color:#fff;}
+tr.odd td {background-color:#e8eef6; }
+tr.even td {background-color:#fff; }
 
 #header {
   height: 80px;
@@ -29,6 +29,12 @@ a.link, a, a.active {
     text-decoration: none;
 }
 
+a.colorred { color: #700; }
+a.coloryellow { color: #9f993f;}
+a.colorblue { color: #050;}
+a.colornone { color:  black;}
+
+.hexdump { font-size: 70%; }
 
 a.description {
     color: black;

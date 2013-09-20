@@ -1,3 +1,21 @@
-- Fehlerbehandlung in SnortDB
-
-
+    *  Eingaben im GET/POST ueberpruefen!!!!
+    * Fehlerbehandlung in SnortDB
+    * crontab
+          o snort pruefen
+          o starten, logen
+          o logs sammeln und anzeigen
+    * Info ueber die Groesse von MySQL
+    * Alerts nach IP sortieren
+    * frueher spaeter Funktion
+    * nach Sensor implementieren
+    * auf Barnyard umsteigen
+    * Snort 2.8
+    * Oinkmaster
+    * Live Alerts mit Ajax
+    * nessus links
+    * Packet Details
+    * Payload Darstellung korrekt
+    * Config Info/Edit
+    * peer Week Alerts
+    * PDF generation
+    * Email functions

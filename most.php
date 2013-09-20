@@ -1,11 +1,17 @@
 <?php
 
+/**
+ * Snort PHP Monitor
+ * @author Andrej Frank <Andrej.Frank@hs-esslingen.de>
+ * @copyright Copyright (c) 2008, Andrej Frank, The GNU General Public License (GPL)
+*/
+
 require_once("class/html.php");
 require_once("config.php");
 require_once("class/class.snortDB.php");
 
-$hours=0;
-$hours=$_GET['hours'];
+$mostpriority=0;
+$mostpriority=get_integer('priority');
 
 function get_cnt($db1, $sql1) {
     $result = $db1->query($sql1);
@@ -13,7 +19,7 @@ function get_cnt($db1, $sql1) {
     return $row->cnt;
 }
 
-html_head("Most alerts");
+html_head("Most alerts last Hour");
 
     $erg="";
     $sec=time();
@@ -45,21 +51,21 @@ html_head("Most alerts");
 <script type="text/javascript" src="PlotKit/SweetCanvas.js"></script>
 <br><br>
 <table border="0">
-<tr><td></td><td><b>Priority in percent</b></td></tr>
+<tr><td></td><td><b>Priority in percent last hour</b></td></tr>
 <tr><td>
     <div><canvas id="graphPriority" height="200" width="200"></canvas></div>
 </td><td>
     <?php
         echo "<table>";
-        echo "<tr><td>Gesamt Alerts:</td><td>$gesamt</td></tr>";
-        echo "<tr><td>High Priority:</td><td> $prio1</td></tr>";
-        echo "<tr><td>Middle Priority:</td><td> $prio2</td></tr>";
-        echo "<tr><td>Low Priority:</td><td> $prio3</td></tr>";
+        echo "<tr><td>Gesamt Alerts:</td><td>$gesamt</td><td>100 %</td></tr>";
+        echo "<tr><td>High Priority:</td><td> $prio1</td><td>".((int)(100*$prio1/$gesamt))." %</td></tr>";
+        echo "<tr><td>Middle Priority:</td><td> $prio2</td><td>".((int)(100*$prio2/$gesamt))." %</td></tr>";
+        echo "<tr><td>Low Priority:</td><td> $prio3</td><td>".((int)(100*$prio3/$gesamt))." %</td></tr>";
         echo "</table>";
 
     ?>
 </td></tr>
-<tr><td></td><td><b>Mosts alerts in percent</b></td></tr>
+<tr><td></td><td><b>Mosts alerts in percent last hour</b></td></tr>
 <tr><td>
     <div><canvas id="graphMosts15" height="300" width="300"></canvas></div>
 </td><td>
@@ -67,16 +73,20 @@ html_head("Most alerts");
     $sql="SELECT sig_id AS cnt FROM signature ORDER BY sig_id DESC LIMIT 1";
     $last_sig_id=get_cnt($db, $sql);
     $ids=array();
+    $sig_id=array();
+    $prio=array();
     for($i=1;$i<=$last_sig_id;$i++) {
         $sql="SELECT count(event.cid) AS cnt
                 FROM event
                 WHERE timestamp>'".$datum."' AND signature='$i'";
         $lcnt=get_cnt($db,$sql);
         if($lcnt>0) {
-            $sql="SELECT sig_name AS bez FROM signature WHERE sig_id='$i'";
+            $sql="SELECT sig_name, sig_priority FROM signature WHERE sig_id='$i'";
             $result = $db->query($sql);
             $row = $db->fetch_object($result);
-            $ids[$row->bez]=$lcnt;
+            $ids[$row->sig_name]=$lcnt;
+            $sig_id[$row->sig_name]=$i;
+            $prio[$row->sig_name]=$row->sig_priority;
         }
     }
 
@@ -86,17 +96,44 @@ html_head("Most alerts");
     echo "<table>";
     $articks=array();
     $ardata2=array();
+    $evenodd="odd";
     foreach($ids as $k=>$v) {
-        $articks[]='{label:"'.$v.'", v:'.$c.'}';
-        $ardata2[]='['.$c.', '.$v.']';
         $summe=$summe+$v;
-        echo "<tr><td>$v</td><td>".set_link_description($k, 'alertInfo.php', 0 )."</td></tr>";
-        $c++;
-        if($c>10)
-            break;
+        if($prio[$k]==$mostpriority or $mostpriority==0) {
+            $color="colornone";
+            if($ij==1) {
+                $ij=0;
+                $evenodd="odd";
+            } else {
+                $ij=1;
+                $evenodd="even";
+            }
+            switch ($prio[$k]) {
+                case 1:
+                    $color="red";
+                    break;
+                case 2:
+                    $color="yellow";
+                    break;
+                case 3:
+                    $color="blue";
+                    break;
+                default:
+                    $color="none";
+            }
+            $articks[]='{label:"'.$v.'", v:'.$c.'}';
+            $ardata2[]='['.$c.', '.$v.']';
+            echo '<tr class="'.$evenodd.'"><td>'.$v.'</td><td>';
+            echo set_link_description($k, 'alertInfo.php', $sig_id[$k])."</td>";
+            echo '<td><img src="images/flag'.$color.'.png" alt="'.$color.'"></td></tr>';
+            $c++;
+            if($c>10)
+                break;
+        }
     }
     $rest=$gesamt-$summe;
-    echo "<tr><td>$rest</td><td>Rest</td></tr>";
+    echo '<tr class="'.$evenodd.'"><td>'.$rest."</td><td>Rest</td>";
+    echo '<td><img src="images/flagnone.png" alt="none"></td></tr>';
     echo "</table>";
 
     $articks[]='{label:"Rest", v:'.$c.'}';
@@ -147,7 +184,7 @@ MochiKit.DOM.addLoadEvent(drawGraph2);
 </script>
 <br>
 <?php
-
+#print_r($prio);
 html_end();
 
 ?>

@@ -1,0 +1,67 @@
+<html><head><title>Statistic</title><link rel="stylesheet" type="text/css" href="css/style.css"></head><body><img src="images/logo.png" alt="Logo"><br>
+<script type="text/javascript" src="MochiKit/MochiKit.js"></script>
+<script type="text/javascript" src="PlotKit/Base.js"></script>
+<script type="text/javascript" src="PlotKit/Layout.js"></script>
+<script type="text/javascript" src="PlotKit/Canvas.js"></script>
+<script type="text/javascript" src="PlotKit/SweetCanvas.js"></script>
+<b>Statistic</b> about TCP, UDP, ICMP etc<br>lastsqlite 2008-07-22 12:00:00<br>lasttime: 2008-07-22 12:32:04<br>cids: 1143400 - 1143712<br><br><b>last 12 hours</b><br><table></tr><td><table border="0"><thead><th>Zeit</th><th>All</th><th>Tcp</th><th>udp</th><th>icmp</th></thead>
+
+<tr class="even"><td>2008-07-22 01:00:00</td><td> 217 </td><td> 140 (65%) </td><td> 58 (27%) </td><td> 0 (0%)</td></tr>
+<tr class="odd"><td>2008-07-22 02:00:00</td><td> 221 </td><td> 165 (75%) </td><td> 36 (16%) </td><td> 0 (0%)</td></tr>
+
+<tr class="even"><td>2008-07-22 03:00:00</td><td> 164 </td><td> 113 (69%) </td><td> 35 (21%) </td><td> 0 (0%)</td></tr>
+<tr class="odd"><td>2008-07-22 04:00:00</td><td> 208 </td><td> 142 (68%) </td><td> 48 (23%) </td><td> 0 (0%)</td></tr>
+
+<tr class="even"><td>2008-07-22 05:00:00</td><td> 168 </td><td> 111 (66%) </td><td> 36 (21%) </td><td> 0 (0%)</td></tr>
+<tr class="odd"><td>2008-07-22 06:00:00</td><td> 226 </td><td> 157 (69%) </td><td> 52 (23%) </td><td> 0 (0%)</td></tr>
+
+<tr class="even"><td>2008-07-22 07:00:00</td><td> 247 </td><td> 195 (79%) </td><td> 39 (16%) </td><td> 1 (0%)</td></tr>
+<tr class="odd"><td>2008-07-22 08:00:00</td><td> 355 </td><td> 287 (81%) </td><td> 56 (16%) </td><td> 0 (0%)</td></tr>
+
+<tr class="even"><td>2008-07-22 09:00:00</td><td> 2620 </td><td> 2569 (98%) </td><td> 40 (2%) </td><td> 0 (0%)</td></tr>
+<tr class="odd"><td>2008-07-22 10:00:00</td><td> 2767 </td><td> 2708 (98%) </td><td> 43 (2%) </td><td> 0 (0%)</td></tr>
+
+<tr class="even"><td>2008-07-22 11:00:00</td><td> 442 </td><td> 374 (85%) </td><td> 48 (11%) </td><td> 0 (0%)</td></tr>
+<tr class="odd"><td>2008-07-22 12:00:00</td><td> 314 </td><td> 275 (88%) </td><td> 28 (9%) </td><td> 0 (0%)</td></tr>
+
+</table>
+</td><td><div><canvas id="graphAlertsHours" height="300" width="400"></canvas></div>
+<script type="text/javascript">
+var options = {
+   "IECanvasHTC": "/plotkit/iecanvas.htc",
+   "colorScheme": PlotKit.Base.palette(PlotKit.Base.baseColors()[1]),
+   "padding": {left: 75, right: 0, top: 10, bottom: 30},
+   
+};
+function drawGraph() {
+    var layout = new PlotKit.Layout("line", options);
+    var cnt=[[0, 217], [1, 221], [2, 164], [3, 208], [4, 168], [5, 226], [6, 247], [7, 355], [8, 2620], [9, 2767], [10, 442], [11, 314] ];
+    var cnttcp=[[0, 140], [1, 165], [2, 113], [3, 142], [4, 111], [5, 157], [6, 195], [7, 287], [8, 2569], [9, 2708], [10, 374], [11, 275] ];
+    var cntudp=[[0, 58], [1, 36], [2, 35], [3, 48], [4, 36], [5, 52], [6, 39], [7, 56], [8, 40], [9, 43], [10, 48], [11, 28] ];
+    var cnticmp=[[0, 0], [1, 0], [2, 0], [3, 0], [4, 0], [5, 0], [6, 1], [7, 0], [8, 0], [9, 0], [10, 0], [11, 0] ];
+    layout.addDataset("cnt", cnt);
+    layout.addDataset("cnttcp", cnttcp);       
+    layout.addDataset("cntudp", cntudp);
+    layout.addDataset("cnticmp", cnticmp);
+    layout.evaluate();
+    var canvas = MochiKit.DOM.getElement("graphAlertsHours");
+    var plotter = new PlotKit.SweetCanvasRenderer(canvas, layout, options);
+    plotter.render();
+}
+MochiKit.DOM.addLoadEvent(drawGraph);
+</script>
+<br>
+
+</td></tr></table><hr>
+
+</body></html>
+
+
+
+
+
+
+
+
+
+
